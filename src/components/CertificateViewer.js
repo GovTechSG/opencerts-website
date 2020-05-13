@@ -34,57 +34,70 @@ const renderHeaderBlock = (props, childRef) => {
     <div className={`container-fluid ${styles["pd-0"]} ${styles.container}`}>
       <div className="row">
         <div>{renderedVerifyBlock}</div>
-        <div className={`row flex-nowrap`}>
-          <div className="">
-            <div
-              id="btn-print"
-              className={styles["print-btn"]}
-              onClick={() => {
-                childRef.current.print();
-              }}
-            >
-              <i className="fas fa-print" style={{ fontSize: "1.5rem" }} />
-            </div>
-          </div>
-          <FeatureFlagContainer
-            name="SHARE_LINK"
-            render={() => (
-              <div
-                className="ml-2"
-                onClick={() => props.handleShareLinkToggle()}
-              >
-                <div id="btn-link" className={styles["send-btn"]}>
-                  <i className="fas fa-link" style={{ fontSize: "1.5rem" }} />
+        <div className={`${styles["share-buttons"]}`}>
+          <div className={`${styles["share-buttons-wrap"]}`}>
+            <div className={`${styles["share-buttons-content"]}`}>
+              <div className={`row flex-nowrap`}>
+                <div className="col-auto">
+                  <div
+                    id="btn-print"
+                    className={`${styles["print-btn"]} ${styles.deadcenter}`}
+                    onClick={() => {
+                      childRef.current.print();
+                    }}
+                  >
+                    <i className="fas fa-print" />
+                  </div>
+                </div>
+                <FeatureFlagContainer
+                  name="SHARE_LINK"
+                  render={() => (
+                    <div
+                      className="col-auto"
+                      onClick={() => props.handleShareLinkToggle()}
+                    >
+                      <div
+                        id="btn-link"
+                        className={`${styles["send-btn"]} ${styles.deadcenter}`}
+                      >
+                        <i className="fas fa-link" />
+                      </div>
+                    </div>
+                  )}
+                />
+                <div
+                  className="col-auto"
+                  onClick={() => props.handleSharingToggle()}
+                >
+                  <div
+                    id="btn-email"
+                    className={`${styles["send-btn"]} ${styles.deadcenter}`}
+                  >
+                    <i className="fas fa-envelope" />
+                  </div>
+                </div>
+                <div className="col-auto">
+                  <a
+                    download={`${props.certificate.id}.opencert`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={`data:text/plain;,${JSON.stringify(
+                      props.document,
+                      null,
+                      2
+                    )}`}
+                  >
+                    <button
+                      id="btn-download"
+                      className={`${styles["send-btn"]} ${styles.deadcenter}`}
+                      title="Download"
+                    >
+                      <i className="fas fa-file-download" />
+                    </button>
+                  </a>
                 </div>
               </div>
-            )}
-          />
-          <div className="ml-2" onClick={() => props.handleSharingToggle()}>
-            <div id="btn-email" className={styles["send-btn"]}>
-              <i className="fas fa-envelope" style={{ fontSize: "1.5rem" }} />
             </div>
-          </div>
-          <div className="ml-2">
-            <a
-              download={`${props.certificate.id}.opencert`}
-              target="_black"
-              href={`data:text/plain;,${JSON.stringify(
-                props.document,
-                null,
-                2
-              )}`}
-            >
-              <button
-                id="btn-download"
-                className={styles["send-btn"]}
-                title="Download"
-              >
-                <i
-                  className="fas fa-file-download"
-                  style={{ fontSize: "1.5rem" }}
-                />
-              </button>
-            </a>
           </div>
         </div>
       </div>

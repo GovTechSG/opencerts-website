@@ -9,6 +9,7 @@
   $bg: $color,
   $hover-outline: $hover-bg
 ) {
+  transition: background-color 0.3s $easeOutCubic;
   border: 1px solid $color;
   color: $text;
   background-color: $bg;
@@ -30,6 +31,7 @@
 }
 
 @mixin round-btn {
+  transition: background-color 0.3s $easeOutCubic;
   border: 1px solid $round-btn-outline;
   background-color: #fff;
   border-radius: (50%);

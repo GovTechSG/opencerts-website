@@ -135,11 +135,43 @@
   text-decoration: none !important;
 }
 
+.share-buttons {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  padding: 0 2rem;
+  bottom: 40px;
+
+  @media only screen and (max-width: 767px) {
+    bottom: 20px;
+  }
+}
+
+.share-buttons-wrap {
+  position: relative;
+  max-width: $max-width;
+  margin: auto;
+}
+
+.share-buttons-content {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  box-shadow: 0 5px 10px rgba($color-black, 0.2);
+  background-color: $color-white;
+  border-radius: 4px;
+  padding: 10px 20px;
+}
+
 .print-btn,
 .send-btn {
   @include round-btn;
-  padding: 0.75rem;
-  margin-left: 1rem;
+  text-align: center;
+
+  width: 40px;
+  height: 40px;
+  font-size: 1.3rem;
 
   i {
     color: #343a40;
@@ -149,6 +181,12 @@
     padding: 4px;
     height: 100%;
     width: 100%;
+  }
+
+  @media only screen and (max-width: 767px) {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
   }
 }
 .print-btn {
@@ -163,6 +201,12 @@
   i {
     color: #fff;
   }
+}
+
+.deadcenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media only screen and (max-width: 550px) {
