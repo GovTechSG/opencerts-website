@@ -1,6 +1,7 @@
 import { v2, WrappedDocument } from "@govtechsg/open-attestation";
 import React, { Component, ReactNode } from "react";
 import { connect } from "react-redux";
+import { UAParser } from "ua-parser-js";
 import { NETWORK_NAME } from "../../config";
 import { updateCertificate } from "../../reducers/certificate.actions";
 import { analyticsEvent } from "../Analytics";
@@ -16,32 +17,30 @@ function demoCount(): void {
 }
 
 const DraggableDemoCertificate: React.FunctionComponent = () => (
-  <div className="hidden lg:block">
-    <div className="flex flex-wrap py-12">
-      <div className="w-1/2 lg:pr-8">
-        <div
-          className="animate-pulsing"
-          draggable="true"
-          onDragStart={(e) => e.dataTransfer.setData(DEMO_CERT, "true")}
-          onDragEnd={demoCount}
-        >
-          <a href={DEMO_CERT} className="cursor-grab" download="demo.opencert" rel="noindex nofollow">
-            <img src="/static/images/dropzone/cert.png" />
-          </a>
-        </div>
+  <div className="flex flex-wrap py-12">
+    <div className="w-1/2 lg:pr-8">
+      <div
+        className="animate-pulsing"
+        draggable="true"
+        onDragStart={(e) => e.dataTransfer.setData(DEMO_CERT, "true")}
+        onDragEnd={demoCount}
+      >
+        <a href={DEMO_CERT} className="cursor-grab" download="demo.opencert" rel="noindex nofollow">
+          <img src="/static/images/dropzone/cert.png" />
+        </a>
       </div>
-      <div className="w-1/2">
-        <img src="/static/images/dropzone/arrow.png" draggable="false" />
-        <p className="text-orange mb-2">Drag me over here to see a demo certificate and other features</p>
-        <img src="/static/images/opencertslogo.svg" draggable="false" />
-      </div>
+    </div>
+    <div className="w-1/2">
+      <img src="/static/images/dropzone/arrow.png" draggable="false" />
+      <p className="text-orange mb-2">Drag me over here to see a demo certificate and other features</p>
+      <img src="/static/images/opencertslogo.svg" draggable="false" />
     </div>
   </div>
 );
 
-const MobileDemoCertificate: React.FunctionComponent = () => (
+const ButtonDemoCertificate: React.FunctionComponent = () => (
   <button
-    className="button bg-green hover:bg-green-300 mx-auto my-8 block lg:hidden"
+    className="button bg-green hover:bg-green-300 mx-auto my-8"
     role="button"
     draggable="false"
     id="demoClick"
@@ -51,16 +50,30 @@ const MobileDemoCertificate: React.FunctionComponent = () => (
   </button>
 );
 
+type DropZoneSectionState = {
+  isNotdraggable?: boolean;
+};
+
 interface DropZoneSectionProps {
   updateCertificate: (certificate: WrappedDocument<v2.OpenAttestationDocument>) => void;
 }
-class DropZoneSection extends Component<DropZoneSectionProps> {
+class DropZoneSection extends Component<DropZoneSectionProps, DropZoneSectionState> {
   constructor(props: DropZoneSectionProps) {
     super(props);
     this.handleDrop = this.handleDrop.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.state = {
+      isNotdraggable: false,
+    };
   }
   componentDidMount(): void {
+    const parser = new UAParser();
+    const isUnsupportedBrowsers = parser.getBrowser().name === "IE" || parser.getBrowser().name === "Edge";
+
+    this.setState({
+      isNotdraggable: isUnsupportedBrowsers,
+    });
+
     const elementDrop = document.getElementById("demoDrop");
     if (elementDrop) {
       elementDrop.addEventListener("drop", this.handleDrop);
@@ -111,8 +124,12 @@ class DropZoneSection extends Component<DropZoneSectionProps> {
                 Whether you&#39;re a student or an employer, OpenCerts lets you verify the certificates you have of
                 anyone from any institution. All in one place.
               </p>
-              <DraggableDemoCertificate />
-              <MobileDemoCertificate />
+              <div className={`${this.state.isNotdraggable ? "block" : "lg:hidden"}`}>
+                <ButtonDemoCertificate />
+              </div>
+              <div className={`${this.state.isNotdraggable ? "lg:hidden" : "hidden"} lg:block`}>
+                <DraggableDemoCertificate />
+              </div>
             </div>
             <div className="w-full lg:w-2/3 lg:pl-10" id="demoDrop">
               <CertificateDropZoneContainer />
